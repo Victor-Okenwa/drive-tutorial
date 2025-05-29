@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Copy .env.example files
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Filter ".env.example" | ForEach-Object {
+            $target = $_.FullName -replace '\.env\.example$', '.env'
+            Copy-Item $_.FullName -Destination $target -Force
+            Write-Output "Copied $($_.FullName) → $target"
+          }
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
