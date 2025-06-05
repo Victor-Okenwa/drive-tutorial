@@ -13,5 +13,5 @@ export default {
     database: env.SINGLESTORE_DB_NAME,
     ssl: {}
   },
-  tablesFilter: ["db_victor_*"],
+  // tablesFilter: ["db_victor_*"],
 } satisfies Config;
